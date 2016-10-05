@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>js hw5-11</title>
+	</head>
+	<body>
+	<script>
+
+//1 создать объект, который описывает ширину и высоту прямоугольника, а так же может посчитать площадь фигуры
+
+const rectangle = {
+	width: 10,
+	height: 10,
+	getSquare: function(){
+		return this.width * this.height;
+	}
+};
+document.write(rectangle.getSquare());
+document.write('<br/><br/>');
+
+//2 создать объект, у которого будет цена товара и его скидка, а так же 2 метода: для получения цены и для расчета цены с учетом скидки
+
+function getPriceWithDiscont(){
+	var getPrice = this.price;
+	var getDiscount  = parseFloat(this.discount);
+	return (getPrice-(getPrice*getDiscount)/100);
+}
+
+const price = {
+	price: 10,
+	discount: '15%',
+	getPriceWithDiscont: getPriceWithDiscont
+}
+document.write(price.getPriceWithDiscont());
+document.write('<br/><br/>');
+
+//3 дан ообъект и функция 
+// const user = {name: 'Abraham'},
+// getUserName = function(){};  внесите изменеия так, что бы можно было вызвать user.getName() и получить 'Abraham'
+
+const user = {
+	name: 'Abraham',
+	getUserName: function(){return user.name;}
+}
+document.write(user.getUserName());
+document.write('<br/><br/>');
+
+// 4 создать объект у которого будет поле высота и метод "увеличить высоту на один"ю Метод должен возвращать новую высоту: 
+
+var object = {
+	height: 10,
+	objHeightPlusOne: function(){
+		return object.height + 1;
+	}
+};
+document.write(object.objHeightPlusOne());
+document.write('<br/><br/>');
+
+
+//5 создать объект "вычислитель"б у которого есть числовое свойство "значение" и методы "удвоить", "прибавить один", "отнять один", методы можно вызывать через точку, образуя цепочку методов
+
+const numerator = {
+	value: 3,
+	double: function(){
+		this.value *= 2;
+		return this;
+	},
+	plusOne: function(){
+		this.value += 1;
+		return this;
+	},
+	minusOne: function(){
+		this.value -= 1;
+		return this;
+	}
+};
+numerator.double().plusOne().minusOne();
+document.write(numerator.value);
+document.write('<br/><br/>');
+
+
+
+//6 разобрать и объяснить что тут происходит
+
+const user2 = {name: 'Abraham'},
+otherUser = {
+	name: 'Jhon',
+	getName: function(){return this.name;}
+}
+console.log(user2.getName);
+// undefined т.к у user2 нет метода getName
+
+user2.getName = otherUser.getName;
+console.log(user2.getName());
+//Abraham  присвоение ключ getName объекту user2
+
+console.log(otherUser.getName());
+//Jhon  т.к сработал ключ getName объекта otherUser
+
+
+
+//задачи this
+//1 что выведет код и почему
+
+function getList(){return this.list};
+let users = {
+	length: 4,
+	list: ['Abraham', 'James', 'John', 'Stiven']
+}
+console.log(getList()); // undefined т.к окружение this - window
+users.getList = getList;
+console.log(users.getList());// массив, т.к задаем users функцию getList
+console.log(getList.call(users));// массив, т.к  с помощью call вызываем функцию с указанным значением this
+
+//2 создать объект с розничной ценой и количеством продуктов. Этот объект должен содержать метод для получения общей стоимости всех товаров
+
+//3 взять объект из предидущей задачи, создать второй, который описывает количество деталей и цену за 1 деталью Для второго объекта нужно узнать общую стоимость всех деталей, но нельзя создавать новые функции и методы.
+
+//2
+var products = {
+	price: 5,
+	coast: 20,
+	getTotal: function(){
+		return this.price*this.coast;
+	}
+};
+document.write(products.getTotal());
+document.write('<br/><br/>');
+//3
+
+var products2 = {
+	price: 10,
+	coast: 200
+};
+products2.getTotal = products.getTotal;
+document.write(products2.getTotal());
+document.write('<br/><br/>');
+
+//4 даны объект и функция:
+// let sizes = {width: 5, height: 10},
+// getSquare = function(){return this.width * this.height};
+//неизменяя функцию или объект получить результат функции getSquare для объекта sizes
+
+let sizes = {width: 5, height: 10},
+getSquare = function(){return this.width * this.height};
+
+document.write(getSquare.apply(sizes));
+document.write('<br/><br/>');
+
+//5 дан массив let num = [4, 12, 0, 10, -2, 4] используя ссылку на массив гайти Math.min, найти минимальный элемент массива
+
+let num = [4, 12, 0, 10, -2, 4];
+document.write(Math.min.apply(null, num));
+document.write('<br/><br/>');
+
+//6 
+// const element = {
+// 	height: '15px',
+// 	marginTop: '5px',
+// 	marginBottom: '5px',
+// 	getFullHeight: function(){
+// 		return this.height + this.marginTop + this.marginBottom; //тут ошибка
+// 	}
+// }
+// исправить метод getFullHeight так, что бы вычислить сумму трех слогаемых (высота + отступы)ю Для другого объекта block{height: '5px', marginTop: '3px', marginBottom: '3px'} вычислить полную высоту getFullHeight, используя для этого объект element. в объект ничего не дописывать
+
+const element = {
+	height: '15px',
+	marginTop: '5px',
+	marginBottom: '5px',
+	getFullHeight: function(){
+		return parseFloat(this.height) + parseFloat(this.marginTop) + parseFloat(this.marginBottom);
+	}
+};
+block = {
+	height: '5px',
+	marginTop: '3px',
+	marginBottom: '3px'
+};
+
+document.write(element.getFullHeight());
+document.write('<br/><br/>');
+
+block.getFullHeight = element.getFullHeight;
+document.write(block.getFullHeight());
+document.write('<br/><br/>');
+
+//7
+let element2 = {
+	height: 25,
+	getHeight: function(){return this.height}
+};
+let getElementHeight = element2.getHeight.bind(element2);
+document.write(getElementHeight());
+
+
+
+
+	</script>
+	</body>
+</html>
